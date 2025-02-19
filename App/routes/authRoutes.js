@@ -89,7 +89,6 @@ router.get("/getOutfitSuggestions", async (req, res) => {
     console.error("Error fetching suggestions:", error);
   }
 });
-
 // Request password reset
 router.post("/requestReset", async (req, res) => {
   const { email } = req.body;
@@ -106,6 +105,23 @@ router.post("/requestReset", async (req, res) => {
     user.resetTokenExpires = expiryTime;
     await user.save();
 
+    // Prepare EmailJS request with templateParams
+    const templateParams = {
+      to_email: email,
+      otp_code: otpCode,
+    };
+
+    const response = await axios.post(
+      "https://api.emailjs.com/api/v1.0/email/send",
+      {
+        service_id: "service_fjsfni9",
+        template_id: "template_2q6p5xg",
+        user_id: "BcJuJqp5RGk6SA9pe",
+        template_params: templateParams,
+      }
+    );
+
+    console.log("EmailJS response:", response.data);
     console.log(`OTP sent to ${email}: ${otpCode}`);
     console.log("Stored Expiry Time:", user.resetTokenExpires);
 
@@ -115,6 +131,7 @@ router.post("/requestReset", async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 });
+
 
 // Reset password
 router.post("/resetPassword", async (req, res) => {
