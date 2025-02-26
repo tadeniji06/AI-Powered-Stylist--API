@@ -62,4 +62,20 @@ router.delete("/delete", verifyToken, async (req, res) => {
   }
 });
 
+// Get User Profile including wardrobe, outfits, and wishlist
+router.get("/profile", verifyToken, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.userId)
+      .populate("ClothingItems")
+      .populate("Outfits")
+      .populate("Wishlist");
+
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    res.json({ user });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error });
+  }
+});
+
 module.exports = router;
