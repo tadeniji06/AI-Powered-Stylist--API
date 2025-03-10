@@ -78,4 +78,17 @@ router.get("/profile", verifyToken, async (req, res) => {
   }
 });
 
+// get current user
+router.get("/current", verifyToken, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.userId);
+    if (!user) return res.status(404).json({ message: "User not found" });
+    res.json({user});
+    console.log('Current User Details:', user);
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error });
+  }
+});
+
+
 module.exports = router;

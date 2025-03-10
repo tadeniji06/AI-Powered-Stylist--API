@@ -16,6 +16,7 @@ router.post("/register", async (req, res) => {
   try {
     if (await User.findOne({ email })) return res.status(400).json({ message: "User already exists" });
     const newUser = new User({ nickname, email, password, age, country, state, favoriteColor, gender });
+    console.log('New User Alert!', newUser)
     await newUser.save();
     const token = jwt.sign({ userId: newUser._id }, process.env.JWT_SECRET, { expiresIn: "30d" });
     res.status(201).json({ token, userId: newUser._id });
@@ -39,6 +40,7 @@ router.post("/login", async (req, res) => {
       age: user.age, country: user.country, state: user.state,
       favoriteColor: user.favoriteColor, gender: user.gender,
     });
+    // console.log(res.status);
   } catch (error) {
     console.error("Login error:", error);
     res.status(500).json({ message: "Server error" });
