@@ -1,7 +1,3 @@
-Alright, bet. Here’s a README so unserious it might just make your API self-aware and start judging your fits. 😭  
-
----
-
 # 👕 AI-Powered Stylist API (a.k.a. "DripGPT")  
 
 ## 💀 What is this?  
